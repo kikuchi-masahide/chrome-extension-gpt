@@ -1,37 +1,41 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 
-const Options = () => {
-  const [choice,setChoice] = useState("red");
+function Options(){
+  return (
+    <>
+      <OpenAIApiKeyInput />
+    </>
+  );
+};
+
+function OpenAIApiKeyInput(){
+  const [key,setKey] = useState("");
 
   useEffect(() => {
     chrome.storage.sync.get({
-      "choice": "red",
+      "openai_api_key": "",
     },(items) => {
-      setChoice(items['choice']);
+      setKey(items['openai_api_key']);
     });
   });
 
-  const generate_onclick = (color:string) => {
-    return () => {
-      setChoice(color);
-      chrome.storage.sync.set({
-        'choice': color
-      })
-    };
+  const on_change = (event:React.ChangeEvent<HTMLInputElement>) => {
+    setKey(event.target.value);
+    chrome.storage.sync.set({
+      'openai_api_key': event.target.value
+    })
   };
 
   return (
     <>
-      <ul>
-        <li><button onClick={generate_onclick('red')}>red</button></li>
-        <li><button onClick={generate_onclick('blue')}>blue</button></li>
-        <li><button onClick={generate_onclick('green')}>green</button></li>
-      </ul>
-      <p>choice:{choice}</p>
+    <div className="container">
+      <label htmlFor="api_key_input">OpenAI Api Key</label>
+      <input id="api_key_input" type="text" value={key} onChange={on_change} className="form-control"/>
+    </div>
     </>
   );
-};
+}
 
 ReactDOM.render(
   <React.StrictMode>
@@ -39,3 +43,4 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
+
