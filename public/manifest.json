@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "chrome-extension-react",
+  "description": "Chrome Extension Sample",
+  "version": "1.0",
+  "action": {
+      "default_popup": "popup.html"
+  },
+  "options_ui": {
+    "page": "options.html"
+  },
+  "permissions": ["scripting","storage"]
+}
