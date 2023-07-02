@@ -10,8 +10,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 //ブックマーク登録でbackgroundからメッセージが来たときのcallback
 function onBookmarkRegistered() {
-    const serializer = new XMLSerializer();
-    const body = serializer.serializeToString(document.body);
+    const body = document.body.innerText;
     const title = document.title;
     const url = window.location.href;
     const ret = {
