@@ -6,6 +6,11 @@ type BookmarkProcessRegistered = {
     url: string,
 };
 
-type BookmarkProcess = BookmarkProcessRegistered;
+type BookmarkProccessDeleted = {
+    stage: 'DELETED',
+    id: string,
+};
 
-export type { BookmarkProcess, BookmarkProcessRegistered };
+type BookmarkProcess = BookmarkProcessRegistered | BookmarkProccessDeleted;
+
+export type { BookmarkProcess, BookmarkProcessRegistered, BookmarkProccessDeleted };
