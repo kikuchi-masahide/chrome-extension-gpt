@@ -9,5 +9,17 @@
   "options_ui": {
     "page": "options.html"
   },
-  "permissions": ["scripting","storage"]
+  "background": {
+    "service_worker": "js/background.js",
+    "persistant": false
+  },
+  "content_scripts":[
+    {
+      "matches": ["<all_urls>"],
+      "run_at": "document_start",
+      "js": ["js/content_script.js"]
+    }
+  ],
+  "permissions": ["scripting","storage","bookmarks","tabs","activeTab"],
+  "host_permissions": ["<all_urls>"]
 }
