@@ -1,5 +1,5 @@
 type StorageSyncData = {
-    openai_api_id: string;
-}
+    openai_api_key: string;
+};
 
 export default StorageSyncData;

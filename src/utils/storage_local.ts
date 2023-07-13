@@ -1,7 +1,6 @@
 function StorageLocalGet(keys: string[]) {
     return new Promise<{ [key: string]: any }>((resolve) => {
         chrome.storage.local.get(keys, (result) => {
-            console.log(result);
             resolve(result);
         });
     });

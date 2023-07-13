@@ -1,7 +1,6 @@
 function StorageSyncGet(keys: string[]) {
     return new Promise<{ [key: string]: any }>((resolve) => {
         chrome.storage.sync.get(keys, (result) => {
-            console.log(result);
             resolve(result);
         });
     });
