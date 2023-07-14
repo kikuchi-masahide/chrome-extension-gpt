@@ -5,7 +5,6 @@ import {
 } from "../types/bookmark_process_type";
 import { StorageLocalGet, StorageLocalSet } from "../utils/storage_local";
 import { embed } from "../utils/embed";
-import { SavedBookmarksData } from "../types/saved_bookmarks_data_type";
 import BookmarkDataType from "../types/bookmark_data_type";
 
 export default async function backgroundStorageOnChanged(
@@ -31,7 +30,7 @@ async function onLocalChanged() {
         console.log("finished ProcessRegistered");
     } else if (process_queue[0].stage === "DELETED") {
         const process = process_queue[0] as BookmarkProccessDeleted;
-        console.log("process_queue[0] is DELETED");
+        await ProcessDeleted(process);
         console.log(process);
     }
     process_queue.shift();
@@ -55,5 +54,20 @@ async function ProcessRegistered(process: BookmarkProcessRegistered) {
         ? (storage_local.saved_bookmarks as BookmarkDataType[])
         : new Array<BookmarkDataType>();
     saved_bookmarks.push(bookmark_data);
+    await StorageLocalSet({ saved_bookmarks });
+}
+
+async function ProcessDeleted(process: BookmarkProccessDeleted) {
+    console.log("ProcessDeleted start");
+    const storage_local = await StorageLocalGet(["saved_bookmarks"]);
+    const saved_bookmarks = storage_local.saved_bookmarks
+        ? (storage_local.saved_bookmarks as BookmarkDataType[])
+        : new Array<BookmarkDataType>();
+    const bookmark_to_delete = saved_bookmarks.find(
+        (bookmark) => bookmark.id === process.id
+    );
+    if (bookmark_to_delete === undefined) return;
+    const index = saved_bookmarks.indexOf(bookmark_to_delete);
+    saved_bookmarks.splice(index, 1);
     await StorageLocalSet({ saved_bookmarks });
 }
