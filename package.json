@@ -19,7 +19,8 @@
   "dependencies": {
     "openai": "^3.3.0",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "react-use": "^17.4.0"
   },
   "devDependencies": {
     "@types/chrome": "0.0.158",
