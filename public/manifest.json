@@ -1,25 +1,25 @@
 {
-  "manifest_version": 3,
-  "name": "chrome-extension-gpt",
-  "description": "Chrome Extension Sample",
-  "version": "1.0",
-  "action": {
-      "default_popup": "popup.html"
-  },
-  "options_ui": {
-    "page": "options.html"
-  },
-  "background": {
-    "service_worker": "js/background.js",
-    "persistant": false
-  },
-  "content_scripts":[
-    {
-      "matches": ["<all_urls>"],
-      "run_at": "document_start",
-      "js": ["js/content_script.js"]
-    }
-  ],
-  "permissions": ["scripting","storage","bookmarks","tabs","activeTab"],
-  "host_permissions": ["<all_urls>"]
+    "manifest_version": 3,
+    "name": "chrome-extension-gpt",
+    "description": "Chrome Extension Sample",
+    "version": "1.0",
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "options_ui": {
+        "page": "options.html"
+    },
+    "background": {
+        "service_worker": "js/background.js",
+        "persistant": false
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "run_at": "document_start",
+            "js": ["js/content_script.js"]
+        }
+    ],
+    "permissions": ["scripting", "storage", "bookmarks", "tabs", "activeTab"],
+    "host_permissions": ["<all_urls>"]
 }

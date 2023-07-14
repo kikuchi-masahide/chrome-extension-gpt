@@ -2,11 +2,11 @@ import {
     BookmarkProcess,
     BookmarkProcessRegistered,
     BookmarkProccessDeleted,
-} from "./types/bookmark_process_type";
-import { StorageLocalGet, StorageLocalSet } from "./utils/storage_local";
-import { embed } from "./embed";
-import { SavedBookmarksData } from "./types/saved_bookmarks_data_type";
-import BookmarkDataType from "./types/bookmark_data_type";
+} from "../types/bookmark_process_type";
+import { StorageLocalGet, StorageLocalSet } from "../utils/storage_local";
+import { embed } from "../utils/embed";
+import { SavedBookmarksData } from "../types/saved_bookmarks_data_type";
+import BookmarkDataType from "../types/bookmark_data_type";
 
 export default async function backgroundStorageOnChanged(
     changes: {

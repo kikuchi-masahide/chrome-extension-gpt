@@ -1,8 +1,8 @@
-import { MessageB2CType } from "./types/message_b2c_type";
+import { MessageB2CType } from "../types/message_b2c_type";
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     message = message as MessageB2CType;
-    if (message.type == 'REGISTERED') {
+    if (message.type == "REGISTERED") {
         sendResponse(onBookmarkRegistered());
     }
     return true;

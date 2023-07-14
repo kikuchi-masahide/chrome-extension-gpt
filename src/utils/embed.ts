@@ -1,6 +1,5 @@
-import { OpenAIApi, Configuration, CreateEmbeddingRequest } from "openai";
-import { StorageSyncGet } from "./utils/storage_sync";
-import { OpenaiEmbedingsResponseType } from "./types/openai_embeddings_response_type";
+import { StorageSyncGet } from "./storage_sync";
+import { OpenaiEmbedingsResponseType } from "../types/openai_embeddings_response_type";
 
 async function embed(text: string) {
     console.log("embed start");
