@@ -7,12 +7,18 @@ import {
     MessageB2CType,
 } from "../types/message_b2c_type";
 import { StorageLocalGet, StorageLocalSet } from "../utils/storage_local";
+import isBookmarkInWorkingDirectory from "../utils/is_bookmark_in_working_directory";
 
 //ブックマークが追加されたら、実行される関数
 export default async function backgroundBookmarksOnCreated(
     id: string,
     bookmark: chrome.bookmarks.BookmarkTreeNode
 ) {
+    console.log(bookmark);
+    if (!(await isBookmarkInWorkingDirectory(bookmark.id))) {
+        console.log("not in working directory");
+        return;
+    }
     const tab = await getCurrentTab();
     type response_type = {
         title: string;
