@@ -14,11 +14,19 @@ export default async function backgroundStorageOnChanged(
     namespace: "sync" | "local" | "managed"
 ) {
     if (namespace === "local") {
-        onLocalChanged();
+        onLocalChanged(changes);
     }
 }
 
-async function onLocalChanged() {
+async function onLocalChanged(changes: {
+    [key: string]: chrome.storage.StorageChange;
+}) {
+    if (changes["process_queue"] !== undefined) {
+        await onLocalProcessQueueChanged();
+    }
+}
+
+async function onLocalProcessQueueChanged() {
     const callback = async (process: BookmarkProcess | undefined) => {
         if (process === undefined) return;
         if (process.stage === "REGISTERED") {

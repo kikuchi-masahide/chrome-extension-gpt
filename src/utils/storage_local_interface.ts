@@ -40,7 +40,11 @@ async function addToSavedBookmarks(bookmark_data: BookmarkDataType) {
     const saved_bookmarks = storage_local.saved_bookmarks
         ? (storage_local.saved_bookmarks as BookmarkDataType[])
         : new Array<BookmarkDataType>();
-    saved_bookmarks.push(bookmark_data);
+    const index = saved_bookmarks.findIndex(
+        (bookmark) => bookmark.id === bookmark_data.id
+    );
+    if (index === -1) saved_bookmarks.push(bookmark_data);
+    else saved_bookmarks[index] = bookmark_data;
     await StorageLocalSet({ saved_bookmarks });
 }
 
