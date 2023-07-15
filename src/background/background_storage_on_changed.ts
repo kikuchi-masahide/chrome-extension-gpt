@@ -3,9 +3,9 @@ import {
     BookmarkProcessRegistered,
     BookmarkProccessDeleted,
 } from "../types/bookmark_process_type";
-import { StorageLocalGet, StorageLocalSet } from "../utils/storage_local";
 import { embed } from "../utils/embed";
 import BookmarkDataType from "../types/bookmark_data_type";
+import * as StorageLocalInterface from "../utils/storage_local_interface";
 
 export default async function backgroundStorageOnChanged(
     changes: {
@@ -19,22 +19,17 @@ export default async function backgroundStorageOnChanged(
 }
 
 async function onLocalChanged() {
-    const storage_local = await StorageLocalGet(["process_queue"]);
-    if (storage_local.process_queue === undefined) return;
-    const process_queue = storage_local.process_queue as BookmarkProcess[];
-    //先頭のみ取り出し削除
-    if (process_queue.length === 0) return;
-    if (process_queue[0].stage === "REGISTERED") {
-        const process = process_queue[0] as BookmarkProcessRegistered;
-        await ProcessRegistered(process);
-        console.log("finished ProcessRegistered");
-    } else if (process_queue[0].stage === "DELETED") {
-        const process = process_queue[0] as BookmarkProccessDeleted;
-        await ProcessDeleted(process);
-        console.log(process);
-    }
-    process_queue.shift();
-    await StorageLocalSet({ process_queue });
+    const callback = async (process: BookmarkProcess | undefined) => {
+        if (process === undefined) return;
+        if (process.stage === "REGISTERED") {
+            const process_registered = process as BookmarkProcessRegistered;
+            await ProcessRegistered(process_registered);
+        } else if (process.stage === "DELETED") {
+            const process_deleted = process as BookmarkProccessDeleted;
+            await ProcessDeleted(process_deleted);
+        }
+    };
+    await StorageLocalInterface.popFromProcessQueue(callback);
 }
 
 async function ProcessRegistered(process: BookmarkProcessRegistered) {
@@ -49,25 +44,10 @@ async function ProcessRegistered(process: BookmarkProcessRegistered) {
         vector: emb,
     };
     //bodyのembeddingをlocalstorageに保存する
-    const storage_local = await StorageLocalGet(["saved_bookmarks"]);
-    const saved_bookmarks = storage_local.saved_bookmarks
-        ? (storage_local.saved_bookmarks as BookmarkDataType[])
-        : new Array<BookmarkDataType>();
-    saved_bookmarks.push(bookmark_data);
-    await StorageLocalSet({ saved_bookmarks });
+    await StorageLocalInterface.addToSavedBookmarks(bookmark_data);
 }
 
 async function ProcessDeleted(process: BookmarkProccessDeleted) {
     console.log("ProcessDeleted start");
-    const storage_local = await StorageLocalGet(["saved_bookmarks"]);
-    const saved_bookmarks = storage_local.saved_bookmarks
-        ? (storage_local.saved_bookmarks as BookmarkDataType[])
-        : new Array<BookmarkDataType>();
-    const bookmark_to_delete = saved_bookmarks.find(
-        (bookmark) => bookmark.id === process.id
-    );
-    if (bookmark_to_delete === undefined) return;
-    const index = saved_bookmarks.indexOf(bookmark_to_delete);
-    saved_bookmarks.splice(index, 1);
-    await StorageLocalSet({ saved_bookmarks });
+    await StorageLocalInterface.deleteFromSavedBookmarks(process.id);
 }

@@ -1,13 +1,10 @@
-import {
-    BookmarkProcess,
-    BookmarkProcessRegistered,
-} from "../types/bookmark_process_type";
+import { BookmarkProcessRegistered } from "../types/bookmark_process_type";
 import {
     MessageB2COnRegisteredType,
     MessageB2CType,
 } from "../types/message_b2c_type";
-import { StorageLocalGet, StorageLocalSet } from "../utils/storage_local";
 import isBookmarkInWorkingDirectory from "../utils/is_bookmark_in_working_directory";
+import * as StorageLocalInterface from "../utils/storage_local_interface";
 
 //ブックマークが追加されたら、実行される関数
 export default async function backgroundBookmarksOnCreated(
@@ -31,18 +28,12 @@ export default async function backgroundBookmarksOnCreated(
     //contentにメッセージを送り、開いているページのhtmlを取得する
     const response = await sendMessageToTab<response_type>(tab, message);
     //html本文を、タスクキューに追加
-    const storage_local = await StorageLocalGet(["process_queue"]);
-    const process_queue: BookmarkProcess[] =
-        storage_local["process_queue"] ?? [];
     const new_process: BookmarkProcessRegistered = {
         stage: "REGISTERED",
         id: bookmark.id,
         ...response,
     };
-    process_queue.push(new_process);
-    await StorageLocalSet({
-        process_queue,
-    });
+    await StorageLocalInterface.pushToProcessQueue(new_process);
 }
 
 //現在のタブを取得し、callbackを実行

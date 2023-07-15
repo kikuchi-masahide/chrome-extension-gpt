@@ -3,8 +3,8 @@ import ReactDOM from "react-dom";
 import { useList } from "react-use";
 
 import { embed } from "../utils/embed";
-import { StorageLocalGet } from "../utils/storage_local";
 import BookmarkDataType from "../types/bookmark_data_type";
+import * as StorageLocalInterface from "../utils/storage_local_interface";
 
 const dot = (a: number[], b: number[]) => {
     return a.map((x, i) => a[i] * b[i]).reduce((m, n) => m + n);
@@ -16,10 +16,7 @@ const search = async (query: string) => {
     const vector = await embed(query);
     console.log("vector", vector);
     //保存しているブックマークの集合
-    const storage_local = await StorageLocalGet(["saved_bookmarks"]);
-    const saved_bookmarks = storage_local.saved_bookmarks
-        ? (storage_local.saved_bookmarks as BookmarkDataType[])
-        : new Array<BookmarkDataType>();
+    const saved_bookmarks = await StorageLocalInterface.getAllSavedBookmarks();
     const similarities: [BookmarkDataType, number][] = saved_bookmarks.map(
         (bookmark) => [bookmark, dot(vector, bookmark.vector)]
     );
