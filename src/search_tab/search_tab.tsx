@@ -1,10 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import OpenInTabButton from "./open_in_tab_button";
 import BookmarkSearchBox from "../components/bookmark_search_box/bookmark_search_box";
 
-const Popup = () => {
+const SearchTab = () => {
     const containerStyle = {
         width: "400px",
         height: "400px",
@@ -12,9 +11,6 @@ const Popup = () => {
     return (
         <>
             <div className="container m-3" style={containerStyle}>
-                <div className="container">
-                    <OpenInTabButton />
-                </div>
                 <BookmarkSearchBox />
             </div>
         </>
@@ -23,7 +19,7 @@ const Popup = () => {
 
 ReactDOM.render(
     <React.StrictMode>
-        <Popup />
+        <SearchTab />
     </React.StrictMode>,
     document.getElementById("root")
 );
