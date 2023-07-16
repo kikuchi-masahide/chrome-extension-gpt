@@ -1,6 +1,19 @@
 import { BookmarkProcess } from "../types/bookmark_process_type";
 import BookmarkDataType from "../types/bookmark_data_type";
 
+async function getApiKey() {
+    const storage_local = await StorageLocalGet(["openai_api_key"]);
+    return storage_local.openai_api_key
+        ? (storage_local.openai_api_key as string)
+        : undefined;
+}
+
+async function setApiKey(api_key: string) {
+    await StorageLocalSet({
+        openai_api_key: api_key,
+    });
+}
+
 async function pushToProcessQueue(process: BookmarkProcess) {
     const storage_local = await StorageLocalGet(["process_queue"]);
     const process_queue: BookmarkProcess[] =
@@ -87,6 +100,8 @@ function StorageLocalSet(items: any) {
 }
 
 export {
+    getApiKey,
+    setApiKey,
     pushToProcessQueue,
     popFromProcessQueue,
     addToSavedBookmarks,
