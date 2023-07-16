@@ -5,11 +5,13 @@ import { useList } from "react-use";
 import { embed } from "../utils/embed";
 import BookmarkDataType from "../types/bookmark_data_type";
 import * as StorageLocalInterface from "../utils/storage_local_interface";
+import SearchResultsTable from "./search_results_table";
 
 const dot = (a: number[], b: number[]) => {
     return a.map((x, i) => a[i] * b[i]).reduce((m, n) => m + n);
 };
 
+//[BookmarkDatatType,類似度]の配列を、類似度降順でソートしたものを返す
 const search = async (query: string) => {
     console.log("searching for", query);
     //embedding
@@ -22,13 +24,15 @@ const search = async (query: string) => {
     );
     //similaritiesを類似度(第1要素)降順でソート
     similarities.sort((a, b) => b[1] - a[1]);
-    return similarities.map((similarity) => similarity[0]);
+    return similarities;
 };
 const Popup = () => {
     const [searchResults, setSearchResults] = useList<BookmarkDataType>();
+    const [similarities, setSimilarities] = useList<number>();
     const onSearchClick = (text: string) => {
         search(text).then((results) => {
-            setSearchResults.set(results);
+            setSearchResults.set(results.map((result) => result[0]));
+            setSimilarities.set(results.map((result) => result[1]));
         });
     };
     const containerStyle = {
@@ -39,9 +43,10 @@ const Popup = () => {
         <>
             <div className="container" style={containerStyle}>
                 <SearchTextbox onSearchClick={onSearchClick} />
-                {searchResults.map((bookmark) => (
-                    <p key={bookmark.id}>{bookmark.title}</p>
-                ))}
+                <SearchResultsTable
+                    searchResults={searchResults}
+                    similarities={similarities}
+                />
             </div>
         </>
     );
