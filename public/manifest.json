@@ -6,9 +6,6 @@
     "action": {
         "default_popup": "popup.html"
     },
-    "options_ui": {
-        "page": "options.html"
-    },
     "background": {
         "service_worker": "js/background.js",
         "persistant": false

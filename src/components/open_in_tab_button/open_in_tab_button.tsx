@@ -2,7 +2,7 @@ import React from "react";
 
 const OpenInTabButton = () => {
     const onclick = () => {
-        chrome.tabs.create({ url: "popup.html" });
+        chrome.tabs.create({ url: "full_window.html" });
     };
     return (
         <>

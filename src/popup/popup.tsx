@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import OpenInTabButton from "./open_in_tab_button";
+import OpenInTabButton from "../components/open_in_tab_button/open_in_tab_button";
 import BookmarkSearchBox from "../components/bookmark_search_box/bookmark_search_box";
 
 const Popup = () => {
