@@ -1,7 +1,17 @@
 type MessageB2COnRegisteredType = {
-    type: 'REGISTERED',
+    type: "REGISTERED";
 };
 
-type MessageB2CType = MessageB2COnRegisteredType;
+type MessageB2COnBookmarkMovedInType = {
+    type: "BOOKMARK_MOVED_IN";
+};
 
-export type { MessageB2CType, MessageB2COnRegisteredType };
+type MessageB2CType =
+    | MessageB2COnRegisteredType
+    | MessageB2COnBookmarkMovedInType;
+
+export type {
+    MessageB2CType,
+    MessageB2COnRegisteredType,
+    MessageB2COnBookmarkMovedInType,
+};
